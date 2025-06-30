@@ -1,23 +1,17 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class WelcomePage extends StatefulWidget {
+class TermsPage extends StatefulWidget {
   final VoidCallback onNext;
 
-  const WelcomePage({super.key, required this.onNext});
+  const TermsPage({super.key, required this.onNext});
 
   @override
-  State<WelcomePage> createState() => _WelcomePageState();
+  State<TermsPage> createState() => _TermsPageState();
 }
 
-class _WelcomePageState extends State<WelcomePage> {
-  @override
-  void initState() {
-    super.initState();
-    // Optional auto-next after 3 seconds:
-    // Timer(const Duration(seconds: 3), widget.onComplete);
-  }
+class _TermsPageState extends State<TermsPage> {
+  bool _agreed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -25,28 +19,16 @@ class _WelcomePageState extends State<WelcomePage> {
       backgroundColor: const Color(0xFFE40078),
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 56.0, vertical: 32.0),
+          padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 32.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Center(
-
                 child: Text(
-                  'Welcome to',
+                  'Terms & Conditions',
                   style: GoogleFonts.poppins(
-                    fontSize: 24,
-                    fontStyle: FontStyle.italic,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-
-              Center(
-                child: Text(
-                  'Kikay!',
-                  style: GoogleFonts.poppins(
-                    fontSize: 64,
+                    fontSize: 32,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
@@ -55,18 +37,7 @@ class _WelcomePageState extends State<WelcomePage> {
               const SizedBox(height: 24),
 
               Text(
-                'Finding the right makeup shade has never been easier. Our AI-powered system detects your skin tone and undertone to recommend the most flattering makeup shades—no more guessing, just perfect matches!',
-                style: GoogleFonts.poppins(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 24),
-
-              Text(
-                'What you\'ll get:\n✔ Accurate undertone detection\n✔ Personalized makeup recommendations\n✔ Easy-to-follow steps',
+                'Before using Kikay, please review the following:\n\n✔ We analyze uploaded images solely for shade matching.\n✔ Your data will be securely stored and used only for improving recommendation accuracy.\n✔ By proceeding, you agree to our Privacy Policy and Terms of Use.',
                 style: GoogleFonts.poppins(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
@@ -74,16 +45,36 @@ class _WelcomePageState extends State<WelcomePage> {
                 ),
                 textAlign: TextAlign.left,
               ),
-              const SizedBox(height: 80),
+              const SizedBox(height: 40),
 
-              //button
+              CheckboxListTile(
+                value: _agreed,
+                onChanged: (value) {
+                  setState(() {
+                    _agreed = value ?? false;
+                  });
+                },
+                controlAffinity: ListTileControlAffinity.leading,
+                contentPadding: EdgeInsets.zero,
+                title: Text(
+                  'Agree to the terms',
+                  style: GoogleFonts.poppins(
+                    fontSize: 14,
+                    color: Colors.white,
+                  ),
+                ),
+                activeColor: Colors.white,
+                checkColor: const Color(0xFFE40078),
+              ),
+              const SizedBox(height: 40),
+
               Center(
                 child: ElevatedButton(
-                  onPressed: widget.onNext,
+                  onPressed: _agreed ? widget.onNext : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
-                    elevation: 12, // shadow depth
-                    shadowColor: Colors.black, // shadow color
+                    elevation: 12,
+                    shadowColor: Colors.black,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(40),
                     ),
@@ -102,8 +93,6 @@ class _WelcomePageState extends State<WelcomePage> {
                   ),
                 ),
               )
-
-
             ],
           ),
         ),
