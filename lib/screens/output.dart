@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'dart:io';
 
 class ImageResultPage extends StatelessWidget {
-  final String imagePath; // Path to the uploaded image (asset or file)
-  final String skinTone; // e.g., "Fair", "Medium", "Deep"
-  final String undertone; // e.g., "Warm", "Cool", "Neutral"
+  final String imagePath;
+  final String skinTone;
+  final String undertone;
 
   const ImageResultPage({
     super.key,
@@ -16,16 +15,22 @@ class ImageResultPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Debugging output
+    debugPrint('Image path: $imagePath');
+    final isAsset = imagePath.startsWith('assets/');
+    final fileExists = isAsset ? true : File(imagePath).existsSync();
+    debugPrint('File exists: $fileExists');
+
     return Scaffold(
-      backgroundColor: const Color(0xFFDC1768), // <- Background color here
+      backgroundColor: const Color(0xFFDC1768),
       appBar: AppBar(
         backgroundColor: const Color(0xFFDC1768),
         elevation: 0,
         leading: Padding(
           padding: const EdgeInsets.all(10.0),
-          child: Text(
+          child: const Text(
             'Kikay',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
               color: Colors.white,
@@ -36,9 +41,7 @@ class ImageResultPage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.arrow_forward),
             color: Colors.white,
-            onPressed: () {
-              Navigator.pop(context); // or navigate somewhere else
-            },
+            onPressed: () => Navigator.pop(context),
           ),
         ],
         automaticallyImplyLeading: false,
@@ -48,15 +51,29 @@ class ImageResultPage extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16),
         child: Column(
           children: [
-            // Image preview
+            // Image preview with error handling
             Expanded(
               child: Center(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image.file(
-                    // use Image.asset if you're using assets
-                    File(imagePath),
-                    fit: BoxFit.contain,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: Colors.black.withAlpha(2),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: isAsset
+                        ? Image.asset(
+                            imagePath,
+                            fit: BoxFit.contain,
+                            errorBuilder: (_, __, ___) => _buildErrorWidget(),
+                          )
+                        : fileExists
+                        ? Image.file(
+                            File(imagePath),
+                            fit: BoxFit.contain,
+                            errorBuilder: (_, __, ___) => _buildErrorWidget(),
+                          )
+                        : _buildErrorWidget(),
                   ),
                 ),
               ),
@@ -90,6 +107,22 @@ class ImageResultPage extends StatelessWidget {
             const SizedBox(height: 24),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildErrorWidget() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(Icons.error_outline, size: 50, color: Colors.white),
+          const SizedBox(height: 10),
+          Text(
+            'Could not load image',
+            style: TextStyle(fontSize: 16, color: Colors.white.withAlpha(8)),
+          ),
+        ],
       ),
     );
   }

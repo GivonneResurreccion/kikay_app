@@ -6,6 +6,8 @@ import 'package:kikay/screens/home.dart';
 import 'package:kikay/screens/camera.dart';
 import 'package:kikay/screens/result.dart';
 import 'package:kikay/screens/preferences.dart';
+import 'package:kikay/screens/output.dart';
+//import 'dart:io';
 
 import 'main.dart';
 
@@ -19,11 +21,27 @@ final Map<String, WidgetBuilder> appRoutes = {
       TermsPage(onNext: () => Navigator.pushNamed(context, '/home')),
   '/home': (context) =>
       HomePage(onNext: () => Navigator.pushNamed(context, '/camera')),
+  // CameraScreen handles its own navigation to '/result'
   '/camera': (context) => CameraScreen(cameras: cameras),
-  '/preferences': (context) => const PreferencesPage(),
+  '/preferences': (context) {
+    // Get the image path from route arguments
+    final imagePath = ModalRoute.of(context)?.settings.arguments as String?;
+
+    return PreferencesPage(
+      onPressed: () => Navigator.pushNamed(
+        context,
+        '/output',
+        arguments: {
+          'imagePath': imagePath,
+          'skinTone': 'Fair',
+          'undertone': 'Neutral',
+        },
+      ),
+    );
+  },
 };
 
-/// Dynamic route generator for routes with arguments (like passing image path)
+/// Dynamic route generator for routes with arguments
 Route<dynamic>? generateRoute(RouteSettings settings) {
   switch (settings.name) {
     case '/result':
@@ -32,9 +50,27 @@ Route<dynamic>? generateRoute(RouteSettings settings) {
         return _errorRoute("Missing image path for ResultPage.");
       }
       return MaterialPageRoute(
+        settings: settings, // Preserve the arguments for later screens
         builder: (context) => ResultPage(imagePath: imagePath),
       );
-
+    case '/output':
+      final args = settings.arguments as Map<String, dynamic>?;
+      if (args == null) {
+        return MaterialPageRoute(
+          builder: (context) => ImageResultPage(
+            imagePath: 'assets/placeholder.jpg',
+            skinTone: 'Fair',
+            undertone: 'Neutral',
+          ),
+        );
+      }
+      return MaterialPageRoute(
+        builder: (context) => ImageResultPage(
+          imagePath: args['imagePath'] ?? 'assets/placeholder.jpg',
+          skinTone: args['skinTone'] ?? 'Fair',
+          undertone: args['undertone'] ?? 'Neutral',
+        ),
+      );
     default:
       return _errorRoute("Route not found: ${settings.name}");
   }

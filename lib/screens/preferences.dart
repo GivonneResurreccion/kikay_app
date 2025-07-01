@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class PreferencesPage extends StatefulWidget {
-  const PreferencesPage({super.key});
+  final VoidCallback? onPressed;
+
+  const PreferencesPage({super.key, this.onPressed});
 
   @override
   State<PreferencesPage> createState() => _PreferencesPageState();
@@ -115,7 +117,7 @@ class _PreferencesPageState extends State<PreferencesPage> {
               ),
               const SizedBox(height: 6),
               Text(
-                'Select what makeup products you’d like recommendations for—foundation, blush, lipstick, and more!',
+                'Select what makeup products you\'d like recommendations for - foundation, blush, lipstick, and more!',
                 style: GoogleFonts.poppins(
                   fontSize: 13,
                   fontStyle: FontStyle.italic,
@@ -124,7 +126,6 @@ class _PreferencesPageState extends State<PreferencesPage> {
               ),
               const SizedBox(height: 24),
 
-              // Categories
               buildCategory('Base Makeup', [
                 buildCheckbox(
                   'Foundation',
@@ -147,7 +148,6 @@ class _PreferencesPageState extends State<PreferencesPage> {
                   (v) => setState(() => bbCream = v!),
                 ),
               ]),
-
               buildCategory('Cheeks', [
                 buildCheckbox(
                   'Blush',
@@ -165,7 +165,6 @@ class _PreferencesPageState extends State<PreferencesPage> {
                   (v) => setState(() => bronzer = v!),
                 ),
               ]),
-
               buildCategory('Eyes', [
                 buildCheckbox(
                   'Eyeshadow',
@@ -183,7 +182,6 @@ class _PreferencesPageState extends State<PreferencesPage> {
                   (v) => setState(() => mascara = v!),
                 ),
               ]),
-
               buildCategory('Lips', [
                 buildCheckbox(
                   'Lipstick',
@@ -207,7 +205,6 @@ class _PreferencesPageState extends State<PreferencesPage> {
                 ),
               ]),
 
-              // Step 3
               Text(
                 'Step 3: Get Your Results!',
                 style: GoogleFonts.poppins(
@@ -229,9 +226,20 @@ class _PreferencesPageState extends State<PreferencesPage> {
               const SizedBox(height: 25),
 
               ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/output');
-                },
+                onPressed:
+                    widget.onPressed ??
+                    () {
+                      Navigator.pushNamed(
+                        context,
+                        '/output',
+                        arguments: {
+                          'imagePath':
+                              'path_to_your_image', // Replace with actual path
+                          'skinTone': 'Fair', // Replace with actual skin tone
+                          'undertone': 'Warm', // Replace with actual undertone
+                        },
+                      );
+                    },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFF1E4F3),
                   padding: const EdgeInsets.symmetric(vertical: 16),

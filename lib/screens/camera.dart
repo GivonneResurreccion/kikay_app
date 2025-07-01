@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CameraScreen extends StatefulWidget {
   final List<CameraDescription> cameras;
@@ -70,26 +71,53 @@ class _CameraScreenState extends State<CameraScreen> {
       if (faces.isNotEmpty) {
         Navigator.pushNamed(context, '/result', arguments: file.path);
       } else {
-        _showNoFaceDialog();
+        _showNoFaceDialog(context);
       }
     } catch (e) {
       debugPrint('Error detecting face: $e');
     }
   }
 
-  void _showNoFaceDialog() {
+  void _showNoFaceDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: pink,
-        title: const Text('No Face Detected'),
-        content: const Text(
-          'Please try again and make sure your face is visible.',
+        backgroundColor: const Color(0xFFF1E4F3), // Soft pink background
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Text(
+          'We’re having trouble analyzing your photo.',
+          style: GoogleFonts.poppins(
+            fontSize: 20,
+            fontStyle: FontStyle.italic,
+            fontWeight: FontWeight.w600,
+            color: const Color(0xFF372623),
+          ),
+        ),
+        content: Text(
+          'Please re-upload or retake a photo with good lighting, minimal makeup, and a clear view of your face.',
+          style: GoogleFonts.poppins(
+            fontSize: 14,
+            color: const Color(0xFF372623),
+          ),
         ),
         actions: [
           TextButton(
+            style: TextButton.styleFrom(
+              backgroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30),
+              ),
+            ),
             onPressed: () => Navigator.pop(context),
-            child: const Text('OK'),
+            child: Text(
+              'OK',
+              style: GoogleFonts.poppins(
+                color: const Color(0xFFDC1768),
+                fontWeight: FontWeight.w600,
+                fontStyle: FontStyle.italic,
+              ),
+            ),
           ),
         ],
       ),

@@ -9,6 +9,10 @@ class ResultPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Verify the file exists
+    final file = File(imagePath);
+    final fileExists = file.existsSync();
+
     return Scaffold(
       backgroundColor: const Color(0xFFF4BBD3),
       body: SafeArea(
@@ -112,22 +116,50 @@ class ResultPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 28),
 
-                      // Captured image
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: Image.file(
-                          File(imagePath),
-                          width: 300,
-                          height: 400,
-                          fit: BoxFit.cover,
+                      // Captured image with error handling
+                      Container(
+                        width: 300,
+                        height: 400,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.grey[200],
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: fileExists
+                              ? Image.file(
+                                  file,
+                                  width: 300,
+                                  height: 400,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return _buildErrorPlaceholder();
+                                  },
+                                )
+                              : _buildErrorPlaceholder(),
                         ),
                       ),
                       const SizedBox(height: 30),
 
-                      // ✅ Styled "Next" button
+                      // Next button with image path passing
                       GestureDetector(
                         onTap: () {
-                          Navigator.pushNamed(context, '/preferences');
+                          if (fileExists) {
+                            Navigator.pushNamed(
+                              context,
+                              '/preferences',
+                              arguments: imagePath, // Pass the image path
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'Please capture a valid image first',
+                                  style: GoogleFonts.poppins(),
+                                ),
+                              ),
+                            );
+                          }
                         },
                         child: Container(
                           width: double.infinity,
@@ -190,6 +222,20 @@ class ResultPage extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
         padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 14),
       ),
+    );
+  }
+
+  Widget _buildErrorPlaceholder() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Icon(Icons.error_outline, size: 50, color: Colors.red),
+        const SizedBox(height: 10),
+        Text(
+          'Image not available',
+          style: GoogleFonts.poppins(fontSize: 16, color: Colors.red),
+        ),
+      ],
     );
   }
 }
