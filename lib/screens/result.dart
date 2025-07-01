@@ -1,16 +1,12 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class HomePage extends StatefulWidget {
-  final VoidCallback onNext;
+class ResultPage extends StatelessWidget {
+  final String imagePath;
 
-  const HomePage({super.key, required this.onNext});
+  const ResultPage({super.key, required this.imagePath});
 
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,12 +24,12 @@ class _HomePageState extends State<HomePage> {
                   fontSize: 24,
                   fontWeight: FontWeight.w600,
                   fontStyle: FontStyle.italic,
-                  color: const Color(0xFFF1E4F3),
+                  color: const Color(0xFFDC1768),
                 ),
               ),
             ),
 
-            // Centered main content
+            // Main content
             Center(
               child: Padding(
                 padding: const EdgeInsets.symmetric(
@@ -44,22 +40,26 @@ class _HomePageState extends State<HomePage> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
+                      const SizedBox(height: 80),
+
+                      // Step title
                       Text(
                         'Step-by-Step Guide',
                         style: GoogleFonts.poppins(
                           fontSize: 28,
                           fontWeight: FontWeight.w600,
                           fontStyle: FontStyle.italic,
-                          color: const Color(0xFFF1E4F3),
+                          color: const Color(0xFFDC1768),
                         ),
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 25),
 
+                      // Step instruction
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          'Step 1: Upload your image',
+                          'Step 1: Upload Your Image',
                           style: GoogleFonts.poppins(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
@@ -83,14 +83,17 @@ class _HomePageState extends State<HomePage> {
                       ),
                       const SizedBox(height: 28),
 
+                      // Camera button
                       _buildRoundedButton(
                         label: 'Camera',
                         icon: Icons.camera_alt,
-                        onPressed: widget.onNext,
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/camera');
+                        },
                       ),
-
                       const SizedBox(height: 20),
 
+                      // or text
                       Text(
                         'or',
                         style: GoogleFonts.poppins(
@@ -99,13 +102,59 @@ class _HomePageState extends State<HomePage> {
                           color: const Color(0xFF372623),
                         ),
                       ),
-
                       const SizedBox(height: 20),
 
+                      // Gallery button (to be implemented)
                       _buildRoundedButton(
                         label: 'Gallery',
                         icon: Icons.image,
-                        onPressed: widget.onNext,
+                        onPressed: () {},
+                      ),
+                      const SizedBox(height: 28),
+
+                      // Captured image
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: Image.file(
+                          File(imagePath),
+                          width: 300,
+                          height: 400,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      const SizedBox(height: 30),
+
+                      // ✅ Styled "Next" button
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/preferences');
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          margin: const EdgeInsets.only(top: 10),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(30),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.1),
+                                offset: const Offset(0, 4),
+                                blurRadius: 6,
+                              ),
+                            ],
+                          ),
+                          child: Text(
+                            'Next',
+                            style: GoogleFonts.poppins(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600,
+                              fontStyle: FontStyle.italic,
+                              color: const Color(0xFFDC1768),
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),
