@@ -139,7 +139,7 @@ class ResultPage extends StatelessWidget {
                             borderRadius: BorderRadius.circular(30),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
+                                color: Colors.black.withAlpha(10),
                                 offset: const Offset(0, 4),
                                 blurRadius: 6,
                               ),
