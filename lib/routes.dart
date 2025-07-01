@@ -7,7 +7,7 @@ import 'package:kikay/screens/camera.dart';
 import 'package:kikay/screens/result.dart';
 import 'package:kikay/screens/preferences.dart';
 import 'package:kikay/screens/output.dart';
-//import 'dart:io';
+import 'package:kikay/screens/productinfo.dart'; // ✅ Import this
 
 import 'main.dart';
 
@@ -21,12 +21,9 @@ final Map<String, WidgetBuilder> appRoutes = {
       TermsPage(onNext: () => Navigator.pushNamed(context, '/home')),
   '/home': (context) =>
       HomePage(onNext: () => Navigator.pushNamed(context, '/camera')),
-  // CameraScreen handles its own navigation to '/result'
   '/camera': (context) => CameraScreen(cameras: cameras),
   '/preferences': (context) {
-    // Get the image path from route arguments
     final imagePath = ModalRoute.of(context)?.settings.arguments as String?;
-
     return PreferencesPage(
       onPressed: () => Navigator.pushNamed(
         context,
@@ -50,9 +47,10 @@ Route<dynamic>? generateRoute(RouteSettings settings) {
         return _errorRoute("Missing image path for ResultPage.");
       }
       return MaterialPageRoute(
-        settings: settings, // Preserve the arguments for later screens
+        settings: settings,
         builder: (context) => ResultPage(imagePath: imagePath),
       );
+
     case '/output':
       final args = settings.arguments as Map<String, dynamic>?;
       if (args == null) {
@@ -71,6 +69,12 @@ Route<dynamic>? generateRoute(RouteSettings settings) {
           undertone: args['undertone'] ?? 'Neutral',
         ),
       );
+
+    case '/productinfo':
+      // You can optionally extract arguments like:
+      // final args = settings.arguments as Map<String, dynamic>?;
+      return MaterialPageRoute(builder: (context) => const ProductInfoPage());
+
     default:
       return _errorRoute("Route not found: ${settings.name}");
   }

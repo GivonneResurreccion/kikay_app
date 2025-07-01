@@ -100,6 +100,7 @@ class _PreferencesPageState extends State<PreferencesPage> {
                 style: GoogleFonts.poppins(
                   fontSize: 24,
                   fontStyle: FontStyle.italic,
+                  fontWeight: FontWeight.bold,
                   color: const Color(0xFFDC1768),
                 ),
               ),
