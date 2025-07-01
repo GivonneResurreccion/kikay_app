@@ -1,20 +1,29 @@
-HEAD
-# kikay
+Kikay: A Facial Image-Based CNN and CIELAB System for Skin Tone and Undertone Detection
 
-Make up
+Kikay is an AI-powered system that leverages Convolutional Neural Networks (CNN) and the CIELAB color space to analyze facial images and determine skin tone and undertone. It aims to assist users in finding makeup, skincare, or fashion products that suit their natural complexion.
 
-## Getting Started
+Features
+- Upload and analyze facial images
+- Detect skin tone using CIELAB color space
+- Classify undertone as warm, cool, or neutral using a trained CNN
+- Recommend suitable shades for makeup and cosmetics
+- Real-time prediction with a user-friendly interface
 
-This project is a starting point for a Flutter application.
+How It Works
+1. Image Preprocessing
+   - Facial region is detected and cropped using OpenCV.
 
-A few resources to get you started if this is your first Flutter project:
+2. Skin Tone Detection
+   - Dominant skin pixels are converted to CIELAB values to classify tone.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+3. Undertone Classification 
+   - A CNN model processes the face crop and predicts undertone (cool, warm, or neutral).
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+4. Results Displayed
+   - Skin tone level (e.g., light, medium, dark)
+   - Undertone (e.g., cool)
+   - Suggested compatible shades
 
-# kikay_app
-346d10c5bc66b8d5ef99a957320d35a03d70c7bd
+Technologies Used
+- Figma
+- Flutter (for frontend UI)
