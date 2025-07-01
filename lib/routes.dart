@@ -5,9 +5,9 @@ import 'package:kikay/screens/terms.dart';
 import 'package:kikay/screens/home.dart';
 import 'package:kikay/screens/camera.dart';
 import 'package:kikay/screens/result.dart';
-import 'package:kikay/screens/preferences.dart'; // Make sure PreferencesPage is implemented
+import 'package:kikay/screens/preferences.dart';
 
-import 'main.dart'; // to access global cameras list
+import 'main.dart';
 
 /// Static routes without arguments
 final Map<String, WidgetBuilder> appRoutes = {
@@ -21,8 +21,6 @@ final Map<String, WidgetBuilder> appRoutes = {
       HomePage(onNext: () => Navigator.pushNamed(context, '/camera')),
   '/camera': (context) => CameraScreen(cameras: cameras),
   '/preferences': (context) => const PreferencesPage(),
-
-  
 };
 
 /// Dynamic route generator for routes with arguments (like passing image path)
