@@ -19,8 +19,7 @@ final Map<String, WidgetBuilder> appRoutes = {
       WelcomePage(onNext: () => Navigator.pushNamed(context, '/terms')),
   '/terms': (context) =>
       TermsPage(onNext: () => Navigator.pushNamed(context, '/home')),
-  '/home': (context) =>
-      HomePage(onNext: () => Navigator.pushNamed(context, '/camera')),
+  '/home': (context) => const HomePage(),
   '/camera': (context) => CameraScreen(cameras: cameras),
   '/preferences': (context) {
     final imagePath = ModalRoute.of(context)?.settings.arguments as String?;
